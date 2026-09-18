@@ -1,1 +1,19 @@
 @import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  --color-surface: #fafaf7;
+  --color-surface-card: #ffffff;
+  --color-border: #e4e4de;
+  --color-ink: #1c1c1a;
+  --color-ink-muted: #5b5b54;
+  --color-accent: #0e7a5f;
+  --color-accent-dark: #0b5c48;
+  --color-accent-soft: #eaf3ef;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}

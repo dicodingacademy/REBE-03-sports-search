@@ -4,7 +4,24 @@ import { getSports } from '../utils/api';
 import { useEffect, useState } from 'react';
 
 function SportsListWrapper({ children }) {
-  return <div className='mt-8'>{children}</div>;
+  return (
+    <section>
+      <h2 className='sr-only'>Hasil Pencarian</h2>
+      {children}
+    </section>
+  );
+}
+
+function StateMessage({ title, description }) {
+  return (
+    <div
+      role='status'
+      className='flex flex-col items-center gap-1 rounded-xl border border-dashed border-border py-16 text-center'
+    >
+      <p className='font-semibold text-ink'>{title}</p>
+      {description ? <p className='max-w-sm text-sm text-ink-muted'>{description}</p> : null}
+    </div>
+  );
 }
 
 export default function SportsList({ query }) {
@@ -31,10 +48,13 @@ export default function SportsList({ query }) {
   if (isLoading) {
     return (
       <SportsListWrapper>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>Hasil Pencarian</h2>
-          <p>Loading...</p>
-        </section>
+        <div role='status' className='flex items-center justify-center gap-3 py-16 text-ink-muted'>
+          <span
+            className='h-4 w-4 animate-spin rounded-full border-2 border-border border-t-accent'
+            aria-hidden='true'
+          />
+          Mencari tim...
+        </div>
       </SportsListWrapper>
     );
   }
@@ -42,10 +62,10 @@ export default function SportsList({ query }) {
   if (!Array.isArray(sports)) {
     return (
       <SportsListWrapper>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>Hasil Pencarian</h2>
-          <p>Error was happened...</p>
-        </section>
+        <StateMessage
+          title='Terjadi kesalahan saat memuat data'
+          description='Coba ulangi pencarianmu beberapa saat lagi.'
+        />
       </SportsListWrapper>
     );
   }
@@ -53,32 +73,30 @@ export default function SportsList({ query }) {
   if (sports.length < 1) {
     return (
       <SportsListWrapper>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>Hasil Pencarian</h2>
-          <p className='mb-4'>
-            Menampilkan {sports.length} hasil pencarian untuk "{query}"
-          </p>
-
-          <p>Nothing was found...</p>
-        </section>
+        <StateMessage
+          title={query ? `Tidak ada tim untuk "${query}"` : 'Mulai pencarianmu'}
+          description={
+            query
+              ? 'Coba kata kunci lain, misalnya nama kota atau liga.'
+              : 'Ketik nama tim olahraga di kolom pencarian di atas.'
+          }
+        />
       </SportsListWrapper>
     );
   }
 
   return (
     <SportsListWrapper>
-      <section>
-        <h2 className='text-2xl font-bold mb-4'>Hasil Pencarian</h2>
-        <p className='mb-4'>
-          Menampilkan {sports.length} hasil pencarian untuk "{query}"
-        </p>
-
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6'>
-          {sports.map((sport) => (
-            <SportsListItem key={sport.idTeam} {...sport} />
-          ))}
-        </div>
-      </section>
+      <p className='mb-4 text-sm text-ink-muted'>
+        Menampilkan {sports.length} hasil untuk &quot;{query}&quot;
+      </p>
+      <ul role='list' className='grid list-none grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+        {sports.map((sport) => (
+          <li key={sport.idTeam}>
+            <SportsListItem {...sport} />
+          </li>
+        ))}
+      </ul>
     </SportsListWrapper>
   );
 }

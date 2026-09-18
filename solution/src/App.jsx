@@ -1,41 +1,47 @@
-import React from 'react';
+import { useState } from 'react';
 import QueryInput from './components/QueryInput';
 import SportsList from './components/SportsList';
 
 export default function App() {
-  const [query, setQuery] = React.useState('');
-
-  const onQueryChange = (newQuery) => {
-    setQuery(newQuery);
-  };
+  const [query, setQuery] = useState('');
 
   return (
-    <div className='min-h-screen bg-gray-100 p-4'>
-      <header className='container mx-auto'>
-        <h1 className='text-3xl font-bold text-center my-4'>Sports Search</h1>
-        <p className='text-center mb-4'>Search for your favorite sports team</p>
+    <div className='grid min-h-screen grid-rows-[auto_1fr_auto] bg-surface text-ink'>
+      <header className='border-b border-border'>
+        <div className='container mx-auto px-6 py-16'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-accent-dark'>
+            Sports Search
+          </p>
+          <h1 className='mt-3 max-w-2xl text-4xl font-extrabold tracking-tight text-ink sm:text-5xl'>
+            Cari tim olahraga favoritmu
+          </h1>
+          <p className='mt-3 max-w-xl text-ink-muted'>
+            Ketik nama tim untuk melihat profil dan lencana resminya.
+          </p>
 
-        <p className='text-center mb-4'>
-          Powered by{' '}
-          <a href='https://sports-api.dicoding.dev/' target='_blank' rel='noopener noreferrer'>
+          <div className='mt-8 max-w-xl'>
+            <QueryInput onQueryChange={setQuery} />
+          </div>
+        </div>
+      </header>
+
+      <main className='container mx-auto px-6 py-10'>
+        <SportsList query={query} />
+      </main>
+
+      <footer className='border-t border-border'>
+        <p className='container mx-auto px-6 py-6 text-sm text-ink-muted'>
+          Data disediakan oleh{' '}
+          <a
+            href='https://sports-api.dicoding.dev/'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='font-medium text-accent-dark underline underline-offset-2 hover:text-accent'
+          >
             Sports API
           </a>
         </p>
-      </header>
-
-      <main className='container mx-auto'>
-        <section>
-          <h2 className='text-2xl font-bold mb-4'>Search</h2>
-          <p className='mb-4'>
-            You can search for your favorite sports team by entering the name of the team in the
-            input field below.
-          </p>
-          <QueryInput onQueryChange={(newQuery) => onQueryChange(newQuery)}></QueryInput>
-        </section>
-        <section>
-          <SportsList query={query}></SportsList>
-        </section>
-      </main>
+      </footer>
     </div>
   );
 }
