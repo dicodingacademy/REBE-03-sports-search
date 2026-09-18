@@ -5,7 +5,7 @@ import { getSportsList } from '../utils/data';
 
 function SportsListWrapper({ children }) {
   return (
-    <section aria-live='polite'>
+    <section>
       <h2 className='sr-only'>Hasil Pencarian</h2>
       {children}
     </section>
@@ -34,7 +34,7 @@ export default function SportsList({ query }) {
   if (!Array.isArray(sports)) {
     return (
       <SportsListWrapper>
-        <div className='flex items-center justify-center gap-3 py-16 text-ink-muted'>
+        <div role='status' className='flex items-center justify-center gap-3 py-16 text-ink-muted'>
           <span
             className='h-4 w-4 animate-spin rounded-full border-2 border-border border-t-accent'
             aria-hidden='true'
@@ -47,11 +47,15 @@ export default function SportsList({ query }) {
 
   return (
     <SportsListWrapper>
-      <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+      <ul role='list' className='grid list-none grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
         {sports.map((sport) => {
-          return <SportsListItem key={sport.idTeam} {...sport} />;
+          return (
+            <li key={sport.idTeam}>
+              <SportsListItem {...sport} />
+            </li>
+          );
         })}
-      </div>
+      </ul>
     </SportsListWrapper>
   );
 }
